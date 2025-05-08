@@ -1,0 +1,13 @@
+<html>
+    <header>
+        <title>Meus carros</title>
+    </header>
+
+    {% block content %}
+        <body>
+            {% for cars in cars %}
+                <h3>{{cars.brand}} - {{ cars.model }} - {{cars.factory_year}}</h3>
+            {% endfor %}
+        </body>
+    {% endblock %}   
+</html>
