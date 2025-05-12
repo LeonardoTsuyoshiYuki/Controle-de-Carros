@@ -1,13 +1,47 @@
-<html>
-    <header>
-        <title>Meus carros</title>
-    </header>
+{% extends "base.html" %}
+{% block title %}Catálogo de Carros{% endblock %}
 
-    {% block content %}
-        <body>
-            {% for cars in cars %}
-                <h3>{{cars.brand}} - {{ cars.model }} - {{cars.factory_year}}</h3>
-            {% endfor %}
-        </body>
-    {% endblock %}   
-</html>
+{% block content %}
+<div class="container py-5">
+
+  <!-- Formulário de busca -->
+  <form method="GET" action="{% url 'cars_list' %}" class="row justify-content-center mb-4">
+    <div class="col-md-6 col-sm-10">
+      <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Buscar carro por modelo..." value="{{ request.GET.search }}">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Grid de carros -->
+  {% if cars %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for car in cars %}
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0">
+            {% if car.photo %}
+              <img src="{{ car.photo.url }}" class="card-img-top" alt="{{ car.model }}">
+            {% else %}
+              <img src="https://via.placeholder.com/400x200?text=Imagem+Indisponível" class="card-img-top" alt="Sem imagem">
+            {% endif %}
+
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+              <p class="card-text mb-1"><strong>Ano Fabricação:</strong> {{ car.factory_year }}</p>
+              <p class="card-text mb-1"><strong>Ano Modelo:</strong> {{ car.model_year }}</p>
+              <p class="card-text mb-1"><strong>Placa:</strong> {{ car.plate|default:"---" }}</p>
+              <p class="card-text text-primary fw-bold fs-5">R$ {{ car.value|floatformat:2 }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center mt-4" role="alert">
+      Nenhum carro encontrado com o critério de busca.
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
