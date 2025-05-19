@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ user_form.as_p}}
+        
+        <input type="submit" Value="Registrar" class="btn btn-primary">
+    </form>
+
+{% endblock %}
+
